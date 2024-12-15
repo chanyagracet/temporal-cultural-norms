@@ -111,8 +111,8 @@ def process_row_with_logging(row, index, temp=0.5):
     return pd.Series(compute_gpt(row["context"], temp=temp))
 
 # %%
-# Choose to uncomment either the hollywood/bollywod files 
-path = "matching_hollywood_contexts.csv"
+# Choose to uncomment either the hollywood/bollywod context files
+path = "matching_hollywood.csv"
 # path = "matching_bollywood_contexts"
 overlaps_df = pd.read_csv(path)
 
