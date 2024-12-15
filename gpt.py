@@ -128,7 +128,7 @@ overlaps_df.head()
 # %%
 # bolly_overlaps_df.to_csv('bollywood_gpt.csv', index=False)
 # TODO: change output_file_name to be desired name
-output_file_name = f"output/entire_bollywood_{gpt_model}.csv"
+output_file_name = f"gpt_data/entire_bollywood_{gpt_model}.csv"
 overlaps_df.to_csv(output_file_name)
 print("done!")
 
