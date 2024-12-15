@@ -8,8 +8,10 @@ for dirname, _, filenames in os.walk('input'):
         print(os.path.join(dirname, filename))
 
 # %%
-MOVIES_META_PATH = '../hollywood/input/movies_meta.csv'
-MOVIES_SUB_PATH = '../hollywood/input/movies_subtitles.csv'
+input_folder_path = "../input/hollywood/"
+# TODO: get these meta and subtitles data from Kaggle
+MOVIES_META_PATH = input_folder_path + "movies_meta.csv'
+MOVIES_SUB_PATH = input_folder_path + "movies_subtitles.csv'
 
 # %%
 meta_df = pd.read_csv(MOVIES_META_PATH)
@@ -76,18 +78,8 @@ def load_and_merge_lexicons(file_path_1, file_path_2):
     combined_df = pd.concat([df1[['word']], df2[['word']]]).drop_duplicates().reset_index(drop=True)
     return combined_df
 
-# Paths to lexicon files
-"""
-shame_path = '../../final_parsed - shame.csv'
-pride_path = '../../final_parsed - pride.csv'
-
-lexicon_df = load_and_merge_lexicons(shame_path, pride_path)
-keywords = lexicon_df['word'].tolist()
-print("List of unique keywords:", keywords)
-"""
 # change to this list
 keywords = ['shame', 'shamed', 'shameful', 'ashamed', 'proud', 'prouder', 'proudly', 'pride']
-# lexicon_df = pd.DataFrame(keywords, columns=['word'])
 print("List of unique keywords:", keywords)
 
 # %%
@@ -183,146 +175,15 @@ def extract_shame_context(df, keywords, num_lines=5):
 
 
     return contexts_with_keywords, contexts_without_keywords
-"""
-def extract_shame_context(df, keywords, num_lines=5):
-    contexts_with_keywords = []
-    contexts_without_keywords = []
-    added_instances = set()
-    # add movie id
-    movie_id_map = {}
-    next_movie_id = 1
-    subtitle_id = 1  # Start subtitle ID counter for each context
     
-    last_processed_line = -1
-    i = 0
-    
-    while i < len(df):
-        row = df.iloc[i]
-    # for i, row in df.iterrows():
-        text = str(row['text']) if pd.notna(row['text']) else ""
-        keyword_found = False
-        
-        movie_name = row['original_title']
-        if movie_name not in movie_id_map:
-            movie_id_map[movie_name] = next_movie_id
-            next_movie_id += 1
-            subtitle_id = 1
-        movie_id = movie_id_map[movie_name]
-        # subtitle_id = 1  # Start subtitle ID counter for each context
-        
-        for keyword in keywords:
-            if re.search(r'\b' + re.escape(keyword) + r'\b', text, re.IGNORECASE):
-                keyword_found = True
-                start = max(i - num_lines, 0)
-                end = min(i + num_lines + 1, len(df))
-                
-                context_df = df.iloc[start:end]
-                
-                context = '\n'.join(
-                    f"[{row['start_time']} - {row['end_time']}] {row['text']}"
-                    for _, row in context_df.iterrows()
-                )
-                
-                if context not in added_instances:
-                    contexts_with_keywords.append({
-                        'movie_id': movie_id,
-                        'subtitle_id': subtitle_id,
-                        'movie_name': movie_name,
-                        'release_year': row['release_date'],
-                        'decade': row['decade'],
-                        'context': context
-                    })
-                    added_instances.add(context)
-                    subtitle_id += 1 
-                    last_processed_line = end - 1
-                    i = last_processed_line + 1
-                break 
-        
-        # If no keyword was found, add the row to contexts_without_keywords
-    
-        if not keyword_found:
-            start = max(i - num_lines, 0)
-            end = min(i + num_lines + 1, len(df))
-            
-            context_df = df.iloc[start:end]
-            
-            context = '\n'.join(
-                f"[{row['start_time']} - {row['end_time']}] {row['text']}"
-                for _, row in context_df.iterrows()
-            )
-            
-            if context not in added_instances:
-                contexts_without_keywords.append({
-                    'movie_id': movie_id,
-                    'subtitle_id': subtitle_id,
-                    'movie_name': movie_name,
-                    'release_year': row['release_date'],
-                    'decade': row['decade'],
-                    'context': context
-                })
-                added_instances.add(context)
-                subtitle_id += 1  # Increment subtitle ID for the next context
-                last_processed_line = end - 1
-                i = last_processed_line + 1
-            else:
-                i += 1
-
-        print(f"done with row {i}!")
-
-    return contexts_with_keywords, contexts_without_keywords
-"""
 contexts_with_keywords, contexts_without_keywords = extract_shame_context(result_df, keywords)
 
 df_with_keywords = pd.DataFrame(contexts_with_keywords)
 df_without_keywords = pd.DataFrame(contexts_without_keywords)
 
-df_with_keywords.to_csv('3_nov11_all_hollywood_contexts_with_keywords.csv', index=False, escapechar='\\')
-df_without_keywords.to_csv('3_nov11_all_hollywoord_contexts_without_keywords.csv', index=False, escapechar='\\')
+# TODO: edit output_file_path as needed
+output_folder_path = "../parsed_input/"
+df_with_keywords.to_csv('matching_hollywood.csv', index=False, escapechar='\\')
+df_without_keywords.to_csv('random_hollywood.csv', index=False, escapechar='\\')
 
 print("done!")
-
-"""
-
-def extract_shame_context(df, keywords, num_lines=5):
-    contexts = []
-    added_instances = set()
-
-    for i, row in df.iterrows():
-        text = str(row['text']) if pd.notna(row['text']) else ""
-
-        for keyword in keywords:
-            if re.search(r'\b' + re.escape(keyword) + r'\b', text, re.IGNORECASE):
-                start = max(i - num_lines, 0)
-                end = min(i + num_lines + 1, len(df))
-                
-                context_df = df.iloc[start:end]
-                
-                context = '\n'.join(
-                    f"[{row['start_time']} - {row['end_time']}] {row['text']}"
-                    for _, row in context_df.iterrows()
-                )
-                
-                if context not in added_instances:
-                    contexts.append({
-                        'movie_name': row['original_title'],
-                        'release_year': row['release_date'],
-                        'decade': row['decade'],
-                        'context': context
-                    })
-                    added_instances.add(context)
-                break 
-
-    return contexts
-"""
-# results = extract_shame_context(result_df, keywords=)
-
-# contexts_df = pd.DataFrame(results)
-
-# print(contexts_df.head())
-
-
-# %%
-# contexts_df.to_csv('shame_list_holly_contexts_df.csv', index=False, escapechar='\\')
-
-
-
