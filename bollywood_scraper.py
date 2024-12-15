@@ -7,7 +7,7 @@ all_names = []
 
 # Define the directory where you want to save the zip files
 # TODO: change it to output folder
-output_directory = "output/bollywood_sub"  # Replace with your target directory
+output_directory = "input/bollywood"  # Replace with your target directory
 
 # Ensure the directory exists
 if not os.path.exists(output_directory):
