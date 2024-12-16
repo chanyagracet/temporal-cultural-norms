@@ -2,7 +2,13 @@
 This is the code used to scrape subtitle data from Hollywood and Bollywood movies and parse through subtitle contexts for explicit and random (matching vs. non-matching) mentions of **shame** and **pride**-related keywords. We also included a `.ipynb` file that persforms Agglomerative using SBERT on the processed data to form clusters and social norms.
 Read more about our study here: TODO: INSERT LINK TO PDF
 
-### Packages to install
+### Setting up
+Make sure to install all necessary python libaries and packages.
+Stay in the root folder, and make sure to create the following directories:
+- input/
+- parsed_input/
+- gpt_data/
+- processed_data/
 
 ### Files
 - parser_code/bollwood_parser.py
