@@ -25,6 +25,7 @@ Below is a detailed explanation of what the data folder includes.
 
 #### Input (not included, check details below)
 *RAW DATA*
+
 - Hollywood dataset:
     - Download and unzip `meta` and `subtitles` data 
     - Upload them inside the folder `input/hollwood/`
@@ -34,6 +35,7 @@ Below is a detailed explanation of what the data folder includes.
 * Refer to the `parser_code/` folder to clean and format the raw data to be ready for the next steps.
 
 *PARSED DATA*
+
 This includes the **matching context** results from `parser_code` files.
 **Note that these can be downloaded from DRIVE or manually ran**
 - Hollywood matching contexts:
@@ -44,6 +46,7 @@ This includes the **matching context** results from `parser_code` files.
     - Upload it inside the folder `parsed_input`
 
 *GPT DATA*
+
 This includes data from calling GPT-4o on data from *PARSED DATA*.
 
 **Note that these can be downloaded from DRIVE or manually ran `python3 gpt.py`**
@@ -79,7 +82,7 @@ This will output the `matching_{cinema}.csv` and `random_{cinema}.csv` files ins
 
 ### Citations
 Please leave us a star and cite our paper(s) if you find our work helpful.
-"""
+```
 Citation to add in Github link - @misc{rai2024socialnormscinemacrosscultural,
       title={Social Norms in Cinema: A Cross-Cultural Analysis of Shame, Pride and Prejudice},
       author={Sunny Rai and Khushang Jilesh Zaveri and Shreya Havaldar and Soumna Nema and Lyle Ungar and Sharath Chandra Guntuku},
@@ -89,7 +92,7 @@ Citation to add in Github link - @misc{rai2024socialnormscinemacrosscultural,
       primaryClass={cs.CY},
       url={https://arxiv.org/abs/2402.11333},
 }
-"""
+```
 
 
 
