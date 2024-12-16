@@ -1,6 +1,5 @@
 # temporal-cultural-norms
 This is the code used to scrape subtitle data from Hollywood and Bollywood movies and parse through subtitle contexts for explicit and random (matching vs. non-matching) mentions of **shame** and **pride**-related keywords. We also included a `.ipynb` file that persforms Agglomerative using SBERT on the processed data to form clusters and social norms.
-Read more about our study here: TODO: INSERT LINK TO PDF
 
 ### Setting up
 Make sure to install all necessary python libaries and packages.
@@ -21,7 +20,6 @@ Stay in the root folder, and make sure to create the following directories:
 ### Data
 *Access data in this [Google Drive link](https://drive.google.com/drive/folders/1XzEAzx93VEOT8FtzhzEzXwCEQihiwLVc?ths=true).*
 
-
 Once you have downloaded all the data locally, please upload them to your project using the same directory structure as the one in Drive.
 Below is a detailed explanation of what the data folder includes.
 
@@ -33,6 +31,7 @@ Below is a detailed explanation of what the data folder includes.
 - Bollywood scraped data:
     - Download and unzip `bollywood_sub` inside the `input/bollywood/` folder on Drive.
     - Upload the unzipped folder into the folder `input/bollywood/` in your project and make sure the names match with the directory in `parser_code/bollywood_parser.py`
+* Refer to the `parser_code/` folder to clean and format the raw data to be ready for the next steps.
 
 *PARSED DATA*
 This includes the **matching context** results from `parser_code` files.
@@ -77,4 +76,21 @@ This will output the `matching_{cinema}.csv` and `random_{cinema}.csv` files ins
 * Run `python3 gpt.py`
 4. Run either the python file or notebook file to process, analyze, and perform clustering on your results from part (3) (`processing.ipynb` or `processing.py`)
 * Load the python notebook and run each cell. Make sure you configure the files and encoding and duplicate booleans as needed
+
+### Citations
+Please leave us a star and cite our paper(s) if you find our work helpful.
+"""
+Citation to add in Github link - @misc{rai2024socialnormscinemacrosscultural,
+      title={Social Norms in Cinema: A Cross-Cultural Analysis of Shame, Pride and Prejudice},
+      author={Sunny Rai and Khushang Jilesh Zaveri and Shreya Havaldar and Soumna Nema and Lyle Ungar and Sharath Chandra Guntuku},
+      year={2024},
+      eprint={2402.11333},
+      archivePrefix={arXiv},
+      primaryClass={cs.CY},
+      url={https://arxiv.org/abs/2402.11333},
+}
+"""
+
+
+
 
