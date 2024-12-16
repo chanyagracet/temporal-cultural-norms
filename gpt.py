@@ -68,6 +68,7 @@ import pandas as pd
 import json
 
 # %%
+#TODO: replace this with your open ai keys
 api_key = "REPLACE WITH YOUR OPEN_AI API_KEY"
 gpt_model = "gpt-4o"
 # %%
@@ -111,8 +112,9 @@ def process_row_with_logging(row, index, temp=0.5):
     return pd.Series(compute_gpt(row["context"], temp=temp))
 
 # %%
-# Choose to uncomment either the hollywood/bollywod context files
-path = "matching_hollywood.csv"
+# TODO: Choose to uncomment either the hollywood/bollywod context files
+input_folder_path = "parsed_input/"
+path = input_folder_path + "matching_hollywood.csv"
 # path = "matching_bollywood_contexts"
 overlaps_df = pd.read_csv(path)
 
@@ -128,7 +130,8 @@ overlaps_df.head()
 # %%
 # bolly_overlaps_df.to_csv('bollywood_gpt.csv', index=False)
 # TODO: change output_file_name to be desired name
-output_file_name = f"gpt_data/entire_bollywood_{gpt_model}.csv"
+output_folder_path = "gpt_data/"
+output_file_name = output_folder_path + f"entire_bollywood_{gpt_model}.csv"
 overlaps_df.to_csv(output_file_name)
 print("done!")
 
