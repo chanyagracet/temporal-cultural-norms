@@ -67,7 +67,7 @@ Please cross-check with the `.ipynb` notebook: `processing_ipynb` to see what ea
 *Assuming you don't have access to Google Drive Folder*
 1. Language and libraries. Make sure you have `python3` and all necessary libraries installed.
 2. Obtain raw data
-* Obtain Hollywood data from the Google Drive folder (or cross-check with ([Kaggle dataset](https://www.kaggle.com/datasets/rounakbanik/the-movies-dataset?select=ratings.csv))).
+* Obtain Hollywood data from the Google Drive folder (or cross-check with the [Kaggle dataset](https://www.kaggle.com/datasets/rounakbanik/the-movies-dataset?select=ratings.csv)).
 * Obtain Bollywood data by running `python3 bollywood_scraper.py`
 3. Parse through raw data to obtain `matching` vs `random` contexts
 * Obtain Hollywood contexts by running `python3 parser_code/hollywood_parser.py`
