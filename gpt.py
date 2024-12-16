@@ -61,77 +61,92 @@ responsible for all those T-shirts
 \nOutput: yes, Vickie, female, pride, for being promoted to manager and earning more money.
 
 """
+
 # %%
 import openai
-import re
 import pandas as pd
-import json
+import os
 
 # %%
-#TODO: replace this with your open ai keys
-api_key = "REPLACE WITH YOUR OPEN_AI API_KEY"
+# TODO: replace it with your own openai api key
+api_key = ""
 gpt_model = "gpt-4o"
-# %%
 
-def compute_gpt(dialogue, temp):
+# TODO: Change the output_file_name 
+output_folder_path = "gpt_data/"
+# FOR BOLLYWOOD
+output_file_name = output_folder_path + f"entire_bollywood_{gpt_model}.csv"
+# FOR HOLLYWOOD
+# output_file_name = output_folder_path + f"entire_hollywood_{gpt_model}.csv"
+
+
+# %%
+def compute_gpt(dialogue, temp=0.5):
     try:
         openai.api_key = api_key
         response = openai.chat.completions.create(
             model=gpt_model,
             messages=[
-              {
-                "role": "system",
-                "content": prompt
-              },
-              {
-                "role": "user",
-                "content": dialogue
-              }
+                {"role": "system", "content": prompt},
+                {"role": "user", "content": dialogue},
             ],
             temperature=temp,
             max_tokens=256,
             top_p=1,
             frequency_penalty=0,
-            presence_penalty=0
+            presence_penalty=0,
         )
-        
         output = response.choices[0].message.content.strip()
         output_list = [item.strip() for item in output.split(",", maxsplit=4)]
-        
+
         if len(output_list) == 5:
             return output_list
         else:
             print(f"Malformed GPT output: {output}")
-            return [None] * 5 
+            return [None] * 5  # Return placeholders if the format is incorrect
     except Exception as e:
         print(f"Error during GPT processing: {e}")
         return [None] * 5
-#%%
-def process_row_with_logging(row, index, temp=0.5):
-    print(f"Processing row at index: {index}")
-    return pd.Series(compute_gpt(row["context"], temp=temp))
 
 # %%
-# TODO: Choose to uncomment either the hollywood/bollywod context files
+# Load data
 input_folder_path = "parsed_input/"
-path = input_folder_path + "matching_hollywood.csv"
-# path = "matching_bollywood_contexts"
+# path = input_folder_path + "matching_hollywood.csv"
+path = input_folder_path + "matching_bollywood.csv"
 overlaps_df = pd.read_csv(path)
+# TODO: uncomment if you want to run on a subset first
+overlaps_df = overlaps_df.sample(n=3, random_state=42)
+
+# Initialize new columns if they don’t exist
+new_columns = ["experience_social_emotion", "character", "social_emotion", "gender", "reason"]
+for col in new_columns:
+    if col not in overlaps_df.columns:
+        overlaps_df[col] = None
+
+# Check if output file exists
+if os.path.exists(output_file_name):
+    # If it exists, load it and continue from where it left off
+    saved_df = pd.read_csv(output_file_name)
+    overlaps_df.update(saved_df)  # Update the DataFrame with saved progress
 
 # %%
-overlaps_df[["experience_social_emotion", "character", "social_emotion", "gender", "reason"]] = [
-    process_row_with_logging(row, index) for index, row in overlaps_df.iterrows()
-]
+try:
+    for index, row in overlaps_df.iterrows():
+        if pd.notnull(row["experience_social_emotion"]):
+            print(f"Skipping already processed index: {index}")
+            continue
+
+        # Process the row and update DataFrame
+        result = compute_gpt(row["context"], temp=0.5)
+        print(f"Processing row at index: {index}")
+        overlaps_df.loc[index, new_columns] = result
+
+        # Save the updated DataFrame after processing each row
+        overlaps_df.to_csv(output_file_name, index=False)
+except KeyboardInterrupt:
+    print("Process interrupted! Partial results saved.")
+except Exception as e:
+    print(f"An error occurred: {e}")
 
 # %%
-print("new subset")
-overlaps_df.head()
-
-# %%
-# bolly_overlaps_df.to_csv('bollywood_gpt.csv', index=False)
-# TODO: change output_file_name to be desired name
-output_folder_path = "gpt_data/"
-output_file_name = output_folder_path + f"entire_bollywood_{gpt_model}.csv"
-overlaps_df.to_csv(output_file_name)
-print("done!")
-
+print("Processing complete!")
